@@ -21,11 +21,13 @@ jobs:
       with:
         distribution: 'adopt'
         java-version: '11' # -_______________-
+    - name: ls
+      run: ls
     - name: Gradle
       uses: actions/setup-gradle@v2
       with:
-            distribution: 'jdk11'
-            version: '7.0.2'
+        distribution: 'jdk11'
+        version: '7.0.2'
     - name: Build apk
       run: cd android && ./gradlew assembleRelease
     - name: envoie de apk
