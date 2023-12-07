@@ -41,7 +41,6 @@ jobs:
     - name: Build on EAS
       run: eas build --platform android --non-interactive
     - run : ls
-
     - uses: actions/checkout@v4
     - name: Setup EAS
       uses: expo/expo-github-action@v8
@@ -51,7 +50,7 @@ jobs:
     - name: Build
       id: build
       run: |
-        npm run build
+        npm run
         mv *.apk test.apk
     - name: Prepare remote server
       uses: appleboy/ssh-action@v1.0.0
