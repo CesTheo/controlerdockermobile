@@ -15,12 +15,15 @@ jobs:
       with:
         node-version: '20'
     - name: Mise a jour du node modules
-      run: npm install
+      run: |
+        npm install
+        npm i -g corepack
     - name: Java 11
       uses: actions/setup-java@v2
       with:
         distribution: 'adopt'
         java-version: '11' # -_______________-
+        cache: "gradle"
     - name: ls
       run: ls
     - name: Gradle
@@ -28,13 +31,14 @@ jobs:
       with:
         distribution: 'jdk11'
         version: '7.0.2'
-    - name: Build apk
-      run: cd android && ./gradlew assembleRelease
+    # - name: Build apk
+    #   run: cd android && ./gradlew assembleRelease
     - name: envoie de apk
       uses: easingthemes/ssh-deploy@v2.1.5
       env:
         SSH_PRIVATE_KEY: ${{ secrets.KEY }}
-        SOURCE: "android/app/build/outputs/apk/release/"
+        SOURCE: "App.js"
+        # SOURCE: "android/app/build/outputs/apk/release/"
         REMOTE_HOST: ${{ secrets.HOST }}
         REMOTE_USER: ${{ secrets.USER }}
         REMOTE_PORT: "22"
