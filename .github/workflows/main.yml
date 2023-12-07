@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout Repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - name: Node
       uses: actions/setup-node@v3
       with:
@@ -31,6 +31,44 @@ jobs:
       with:
         distribution: 'jdk11'
         version: '7.0.2'
+    - name: Setup Expo and EAS
+      uses: expo/expo-github-action@v8
+      with:
+        eas-version: latest
+        token: ${{ secrets.EXPO }}
+    - name: Install dependencies
+      run: npm ci
+    - name: Build on EAS
+      run: eas build --platform android --non-interactive
+    - run : ls
+
+    - uses: actions/checkout@v4
+    - name: Setup EAS
+      uses: expo/expo-github-action@v8
+      with:
+        eas-version: latest
+        token: ${{ secrets.EXPO }}
+    - name: Build
+      id: build
+      run: |
+        npm run build
+        mv *.apk test.apk
+    - name: Prepare remote server
+      uses: appleboy/ssh-action@v1.0.0
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.KEY }}
+        script: |
+          mkdir -p ~/mobile
+    - name: Copy build package file
+      uses: appleboy/scp-action@v0.1.4
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.KEY }}
+        source: test.apk
+        target: ~/mobile
     # - name: Build apk
     #   run: cd android && ./gradlew assembleRelease
     - name: Config de la clé private via création d'un fichier + injection
