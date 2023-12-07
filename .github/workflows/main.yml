@@ -24,7 +24,7 @@ jobs:
     - name: ls
       run: ls
     - name: Gradle
-      uses: actions/setup-gradle@v2
+      uses: gradle/gradle-build-action@v2
       with:
         distribution: 'jdk11'
         version: '7.0.2'
